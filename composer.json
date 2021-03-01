@@ -1,0 +1,18 @@
+{
+    "name": "zeratul/price_generator",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Dmitry Mlynnik",
+            "email": "Zeratulaxer@mail.ru"
+        }
+    ],
+    "require": {
+      "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src"
+        }
+    }
+}
