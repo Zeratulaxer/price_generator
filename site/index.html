@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Price generator</title>
+    <script type="text/javascript">
+        function initializeBrands() {
+            fetch('http://localhost:8080/getBrands')
+                .then(res => res.text())
+                .then((json) => {
+                    const brands = JSON.parse(json);
+
+                    const brandList = document.getElementById("brand_list");
+
+                    brandList.options.length = 0;
+
+                    brands.forEach((brand) => {
+                        brandList.append(new Option(brand.Brand, brand.id))
+                    });
+
+                    onSelectBrand(brandList);
+                })
+                .catch((error) => {
+                    console.error('Request failed', error)
+                });
+        }
+
+        function onSelectBrand(brandList) {
+            fetch('http://localhost:8080/getModels/' + brandList.value)
+                .then(res => res.text())
+                .then((json) => {
+                    const models = JSON.parse(json);
+
+                    const modelList = document.getElementById("model_list");
+
+                    modelList.options.length = 0;
+                    modelList.disabled = false;
+
+                    models.forEach((model) => {
+                        modelList.append(new Option(model.model, model.id))
+                    });
+
+                    onSelectModel(modelList);
+                })
+                .catch((error) => {
+                    console.error('Request failed', error)
+                });
+        }
+
+        function onSelectModel(modelList) {
+            fetch('http://localhost:8080/getModelDetails/' + modelList.value)
+                .then(res => res.text())
+                .then((json) => {
+                    const details = JSON.parse(json)[0];
+
+                    const modelDetails = document.getElementById("model_details");
+
+                    modelDetails.value = Object.entries(details)
+                        .map((key, value) => {
+                            return [key, value].join(": ");
+                        })
+                        .join("\n");
+                })
+                .catch((error) => {
+                    console.error('Request failed', error)
+                });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            initializeBrands();
+        });
+    </script>
+</head>
+<body>
+
+<label for="brand_list">Select brand:</label>
+<select id="brand_list" name="brand_list" onchange="onSelectBrand(this)"></select>
+
+<br>
+<br>
+
+<label for="model_list">Select model:</label>
+<select id="model_list" name="model_list" disabled="disabled" onchange="onSelectModel(this)">
+    <option value="1">Please select brand...</option>
+</select>
+
+<br>
+<br>
+
+<div>Model details:</div>
+<textarea id="model_details" rows=20 cols=50>
+</textarea>
+
+</body>
+</html>

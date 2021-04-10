@@ -27,6 +27,6 @@ class ModelDetailsController
             return $value['model_id'] == $model_id;
         });
 
-        return json_encode($filtered_result);
+        return json_encode(array_values($filtered_result));
     }
 }

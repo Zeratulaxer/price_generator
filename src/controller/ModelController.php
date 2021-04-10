@@ -26,7 +26,7 @@ class ModelController
             return $value['brand_id'] == $brand_id;
         });
 
-        return json_encode($filtered_result);
+        return json_encode(\array_values($filtered_result));
     }
 }
 
