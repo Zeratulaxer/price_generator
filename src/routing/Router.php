@@ -19,8 +19,10 @@ class Router
         self::$rules['post'][self::toPattern($rule)] = $callback;
     }
 
-    public static function handle(string $method, string $uri)
+    public static function handle(array $request)
     {
+        ['method' => $method, 'uri' => $uri] = $request;
+
         $pureUri = rtrim($uri, " \t\n\r\0\x0B\/");
 
         //todo support POST
@@ -32,15 +34,13 @@ class Router
                     return array_key_exists($argName, $matches) ? $matches[$argName] : null;
                 }, self::getArgumentNames($callback));
 
-                $callback(...$args);
-
-                return;
+                return $callback(...$args);
             }
 
             unset($matches);
         }
 
-        echo 'Unknown route!';
+        return 'Unknown route!';
     }
 
     /**

@@ -19,14 +19,14 @@ class ModelController
 
         //rows
         while ($row = fgetcsv($handle, 0, ';')) {
-            if ($row[2] == $brand_id) {
-                $result[] = array_combine($headers, $row);
-            }
+            $result[] = array_combine($headers, $row);
         }
 
-        array_filter($result, function ($value) use ($brand_id) {
-            return json_encode($value == $brand_id);
+        $filtered_result = array_filter($result, function (array $value) use ($brand_id) {
+            return $value['brand_id'] == $brand_id;
         });
+
+        return json_encode($filtered_result);
     }
 }
 

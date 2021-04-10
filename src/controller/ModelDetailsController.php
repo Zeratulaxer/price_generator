@@ -20,13 +20,13 @@ class ModelDetailsController
 
         //rows
         while ($row = fgetcsv($handle, 0, ';')) {
-            if ($row[10] == $model_id) {
-                $result[] = array_combine($headers, $row);
-            }
+            $result[] = array_combine($headers, $row);
         }
 
-        array_filter($result, function ($value) use ($model_id) {
-            return json_encode($value == $model_id);
+        $filtered_result = array_filter($result, function (array $value) use ($model_id) {
+            return $value['model_id'] == $model_id;
         });
+
+        return json_encode($filtered_result);
     }
 }

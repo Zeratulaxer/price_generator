@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  php_fpm_nginx:
+    build:
+      context: .
+      dockerfile: nginx.Dockerfile
+    depends_on:
+      - php_fpm
+    ports:
+      - 8080:8080
+    networks:
+      - price_gen_network
+
+  php_fpm:
+    build:
+      context: .
+      dockerfile: php_fpm.Dockerfile
+    volumes:
+      - ./:/price_gen
+    environment:
+      XDEBUG_CONFIG: remote_host=${XDEBUG_REMOTE_HOST}
+      PHP_IDE_CONFIG: serverName=price_gen
+    networks:
+      - price_gen_network
+
+networks:
+  price_gen_network:
+    driver: bridge

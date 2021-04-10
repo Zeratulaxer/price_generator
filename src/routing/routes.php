@@ -6,20 +6,19 @@ use App\controller\BrandController;
 use App\controller\ModelController;
 use App\controller\ModelDetailsController;
 
+function getFilename(string $filename): string
+{
+    return __DIR__ . "/../../storage/$filename";
+}
+
 Router::get('/getBrands', function () {
-
-    BrandController::getBrands('storage/brands.csv');
-
+    return BrandController::getBrands(getFilename("brands.csv"));
 });
 
 Router::get('/getModels/{brand_id}', function ($brand_id) {
-
-    ModelController::getModels('storage/models.csv', $brand_id);
-
+    return ModelController::getModels(getFilename("models.csv"), $brand_id);
 });
 
 Router::get('/getModelDetails/{model_id}', function ($model_id) {
-
-    ModelDetailsController::getModelDetails('storage/model_details.csv', $model_id);
-
+    return ModelDetailsController::getModelDetails(getFilename("model_details.csv"), $model_id);
 });
