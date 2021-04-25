@@ -12,7 +12,7 @@ function getFilename(string $filename): string
 }
 
 Router::get('/getBrands', function () {
-    return BrandController::getBrands(getFilename("brands.csv"));
+    return BrandController::getBrands();
 });
 
 Router::get('/getModels/{brand_id}', function ($brand_id) {

@@ -2,26 +2,17 @@
 
 namespace App\controller;
 
-use RuntimeException;
+use App\repository\CsvMobileBrandRepository;
 
+//todo use DI
 class BrandController
 {
-    public static function getBrands(string $filename): string
+    public static function getBrands(): string
     {
-        if (($handle = fopen($filename, 'r')) !== false) {
-            $headers = fgetcsv($handle, 0, ';');
-        } else throw new RuntimeException('File not found or do not open');
+        $csvMobileBrandRepository = new CsvMobileBrandRepository();
 
-        // todo process error cases
+        $mobileBrands = $csvMobileBrandRepository->findAll();
 
-        //colums
-        $result = [];
-
-        //rows
-        while ($row = fgetcsv($handle, 0, ';')) {
-            $result[] = array_combine($headers, $row);
-        }
-
-        return json_encode($result);
+        return json_encode($mobileBrands);
     }
 }
