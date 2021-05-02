@@ -55,7 +55,7 @@ class MobileBrand implements \JsonSerializable
     {
         return [
             'id' => $this->getId(),
-            'Brand' => $this->getName()
+            'name' => $this->getName()
         ];
     }
 }

@@ -18,7 +18,7 @@
                     brandList.options.length = 0;
 
                     brands.forEach((brand) => {
-                        brandList.append(new Option(brand.Brand, brand.id))
+                        brandList.append(new Option(brand.name, brand.id))
                     });
 
                     onSelectBrand(brandList);
@@ -40,7 +40,7 @@
                     modelList.disabled = false;
 
                     models.forEach((model) => {
-                        modelList.append(new Option(model.model, model.id))
+                        modelList.append(new Option(model.name, model.id))
                     });
 
                     onSelectModel(modelList);
@@ -54,15 +54,17 @@
             fetch('http://localhost:8080/getModelDetails/' + modelList.value)
                 .then(res => res.text())
                 .then((json) => {
-                    const details = JSON.parse(json)[0];
+                    const details = JSON.parse(json);
 
                     const modelDetails = document.getElementById("model_details");
 
-                    modelDetails.value = Object.entries(details)
-                        .map((key, value) => {
-                            return [key, value].join(": ");
-                        })
-                        .join("\n");
+                    modelDetails.value = details === null
+                        ? `Details not found for "${modelList.options[modelList.selectedIndex].text}".`
+                        : Object.entries(details)
+                            .map((key, value) => {
+                                return [key, value].join(": ");
+                            })
+                            .join("\n")
                 })
                 .catch((error) => {
                     console.error('Request failed', error)

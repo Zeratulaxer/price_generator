@@ -2,10 +2,10 @@
 
 namespace App\model;
 
-class ModelDetails
+class ModelDetails implements \JsonSerializable
 {
     private int $id;
-    private int $modelId;
+    private string $name;
     private string $processor;
     private string $cpu;
     private string $memory;
@@ -14,11 +14,12 @@ class ModelDetails
     private string $display;
     private string $rear_camera;
     private string $front_camera;
+    private int $model_id;
 
     /**
      * ModelDetails constructor.
      * @param int $id
-     * @param int $modelId
+     * @param string $name
      * @param string $processor
      * @param string $cpu
      * @param string $memory
@@ -27,11 +28,12 @@ class ModelDetails
      * @param string $display
      * @param string $rear_camera
      * @param string $front_camera
+     * @param int $model_id
      */
-    public function __construct(int $id, int $modelId, string $processor, string $cpu, string $memory, string $storage, string $battery, string $display, string $rear_camera, string $front_camera)
+    public function __construct(int $id, string $name, string $processor, string $cpu, string $memory, string $storage, string $battery, string $display, string $rear_camera, string $front_camera, int $model_id)
     {
         $this->id = $id;
-        $this->modelId = $modelId;
+        $this->name = $name;
         $this->processor = $processor;
         $this->cpu = $cpu;
         $this->memory = $memory;
@@ -40,6 +42,7 @@ class ModelDetails
         $this->display = $display;
         $this->rear_camera = $rear_camera;
         $this->front_camera = $front_camera;
+        $this->model_id = $model_id;
     }
 
     /**
@@ -59,19 +62,19 @@ class ModelDetails
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getModelId(): int
+    public function getName(): string
     {
-        return $this->modelId;
+        return $this->name;
     }
 
     /**
-     * @param int $modelId
+     * @param string $name
      */
-    public function setModelId(int $modelId): void
+    public function setName(string $name): void
     {
-        $this->modelId = $modelId;
+        $this->name = $name;
     }
 
     /**
@@ -200,5 +203,38 @@ class ModelDetails
     public function setFrontCamera(string $front_camera): void
     {
         $this->front_camera = $front_camera;
+    }
+
+    /**
+     * @return int
+     */
+    public function getModelId(): int
+    {
+        return $this->model_id;
+    }
+
+    /**
+     * @param int $model_id
+     */
+    public function setModelId(int $model_id): void
+    {
+        $this->model_id = $model_id;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'processor' => $this->getProcessor(),
+            'cpu' => $this->getCpu(),
+            'memory' => $this->getMemory(),
+            'storage' => $this->getStorage(),
+            'battery' => $this->getBattery(),
+            'display' => $this->getDisplay(),
+            'rear_camera' => $this->getRearCamera(),
+            'front_camera' => $this->getFrontCamera(),
+            'model_id' => $this->getModelId(),
+        ];
     }
 }

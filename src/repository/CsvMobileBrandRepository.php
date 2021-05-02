@@ -3,6 +3,7 @@
 namespace App\repository;
 
 use App\model\MobileBrand;
+use RuntimeException;
 
 class CsvMobileBrandRepository implements MobileBrandRepositoryInterface
 {
@@ -21,7 +22,7 @@ class CsvMobileBrandRepository implements MobileBrandRepositoryInterface
     {
         $handle = fopen($this->getFilename(), 'r');
 
-        if ($handle === false) throw new \RuntimeException('File not found or do not open');
+        if ($handle === false) throw new RuntimeException('File not found or do not open');
 
         $headers = fgetcsv($handle, 0, self::SEPARATOR);
 
@@ -43,7 +44,7 @@ class CsvMobileBrandRepository implements MobileBrandRepositoryInterface
     {
         return new MobileBrand(
             $item['id'],
-            $item['Brand'],
+            $item['name'],
         );
     }
 }

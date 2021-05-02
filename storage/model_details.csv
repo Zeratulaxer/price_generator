@@ -1,4 +1,4 @@
-id;Model;Processor;CPU;Memory;Storage;Battery;Display;Rear camera;Front camera;model_id
+id;name;processor;cpu;memory;storage;battery;display;rear_camera;front_camera;model_id
 1;Iphone 11 Pro Max;A11 Bionic;2.99GHz;8GB RAM;256GB;1000mAh;12.0;12Mp;12;3
 2;Iphone 8;A11 Bionic;2.99GHz;6GB RAM;512GB;2000mAh;12.0;14Mp;12;1
 3;Iphone X;A12 Bionic;2.99GHz;4GB RAM;128GB;3000mAh;12.0;16Mp;12;2

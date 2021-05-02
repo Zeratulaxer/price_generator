@@ -2,7 +2,7 @@
 
 namespace App\model;
 
-class MobileModel
+class MobileModel implements \JsonSerializable
 {
     private int $id;
     private string $name;
@@ -67,5 +67,14 @@ class MobileModel
     public function setBrandId(int $brand_id): void
     {
         $this->brand_id = $brand_id;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'brand_id' => $this->getBrandId()
+        ];
     }
 }
