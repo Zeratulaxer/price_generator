@@ -6,6 +6,13 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Price generator</title>
+    <style>
+        @media print {
+            .noPrint {
+                display: none;
+            }
+        }
+    </style>
     <script type="text/javascript">
         function initializeBrands() {
             fetch('http://localhost:8080/getBrands')
@@ -56,19 +63,49 @@
                 .then((json) => {
                     const details = JSON.parse(json);
 
-                    const modelDetails = document.getElementById("model_details");
+                    const brandList = document.getElementById("brand_list");
 
-                    modelDetails.value = details === null
-                        ? `Details not found for "${modelList.options[modelList.selectedIndex].text}".`
-                        : Object.entries(details)
-                            .map((key, value) => {
-                                return [key, value].join(": ");
-                            })
-                            .join("\n")
+                    const modelName = modelList.options[modelList.selectedIndex].text
+                    const brandName = brandList.options[brandList.selectedIndex].text
+
+                    updateCanvas(brandName, modelName, details)
                 })
                 .catch((error) => {
                     console.error('Request failed', error)
                 });
+        }
+
+        function updateCanvas(brandName, modelName, details) {
+            const canvas = document.getElementById("priceFormCanvas");
+            const priceFormImg = document.getElementById("priceForm");
+            const ctx = canvas.getContext("2d");
+
+            canvas.height = priceFormImg.height
+            canvas.width = priceFormImg.width
+            canvas.crossOrigin = "Anonymous";
+
+            ctx.drawImage(priceFormImg, 0, 0);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(priceFormImg, 0, 0);
+
+            const centerPointX = (priceFormImg.width - 10) / 2
+            const halfLength = (brandName + " " + modelName).length / 2
+
+            ctx.fillStyle = "black";
+            ctx.font = "20px Verdana";
+            ctx.fillText(brandName + " " + modelName, centerPointX - halfLength * 8, 140);
+
+            if (details === null) return
+
+            ctx.fillText(details.display, 60, 550);
+            ctx.fillText(details.storage, 57, 605);
+
+            ctx.font = "12px Verdana";
+            ctx.fillText(details.cpu, 167, 550);
+            ctx.fillText(details.battery, 165, 605);
+
+            ctx.font = "20px Verdana";
+            ctx.fillText(details.rear_camera, 265, 550);
         }
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -78,23 +115,25 @@
 </head>
 <body>
 
-<label for="brand_list">Select brand:</label>
-<select id="brand_list" name="brand_list" onchange="onSelectBrand(this)"></select>
+<label class="noPrint" for="brand_list">Select brand:</label>
+<select class="noPrint" id="brand_list" name="brand_list" onchange="onSelectBrand(this)"></select>
 
 <br>
 <br>
 
-<label for="model_list">Select model:</label>
-<select id="model_list" name="model_list" disabled="disabled" onchange="onSelectModel(this)">
+<label class="noPrint" for="model_list">Select model:</label>
+<select class="noPrint" id="model_list" name="model_list" disabled="disabled" onchange="onSelectModel(this)">
     <option value="1">Please select brand...</option>
 </select>
 
 <br>
 <br>
 
-<div>Model details:</div>
-<textarea id="model_details" rows=20 cols=50>
-</textarea>
+<canvas id="priceFormCanvas"></canvas>
+<img style="display: none" id="priceForm" src='price_form.jpg'/>
+<div>
+    <button onclick="window.print();" class="noPrint">Print</button>
+</div>
 
 </body>
 </html>
