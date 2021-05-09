@@ -3,12 +3,16 @@
 namespace App\repository;
 
 use App\model\MobileBrand;
-use RuntimeException;
+use App\service\csvStorage\CsvStorage;
 
 class CsvMobileBrandRepository implements MobileBrandRepositoryInterface
 {
-    private const FILENAME = 'brands.csv';
-    private const SEPARATOR = ';';
+    private CsvStorage $csvStorage;
+
+    public function __construct(CsvStorage $csvStorage)
+    {
+        $this->csvStorage = $csvStorage;
+    }
 
     function add(MobileBrand $mobileBrand): void
     {
@@ -20,27 +24,10 @@ class CsvMobileBrandRepository implements MobileBrandRepositoryInterface
      */
     function findAll(): array
     {
-        $handle = fopen($this->getFilename(), 'r');
-
-        if ($handle === false) throw new RuntimeException('File not found or do not open');
-
-        $headers = fgetcsv($handle, 0, self::SEPARATOR);
-
-        $mobileBrands = [];
-
-        while ($row = fgetcsv($handle, 0, self::SEPARATOR)) {
-            $mobileBrands[] = $this->hydrate(array_combine($headers, $row));
-        }
-
-        return $mobileBrands;
+        return $this->csvStorage->findAll(array($this, 'hydrate'));
     }
 
-    private function getFilename(): string
-    {
-        return __DIR__ . "/../../storage/" . self::FILENAME;
-    }
-
-    private function hydrate(array $item): MobileBrand
+    function hydrate(array $item): MobileBrand
     {
         return new MobileBrand(
             $item['id'],

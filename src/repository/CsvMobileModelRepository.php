@@ -3,12 +3,16 @@
 namespace App\repository;
 
 use App\model\MobileModel;
-use RuntimeException;
+use App\service\csvStorage\CsvStorage;
 
 class CsvMobileModelRepository implements MobileModelRepositoryInterface
 {
-    private const FILENAME = 'models.csv';
-    private const SEPARATOR = ';';
+    private CsvStorage $csvStorage;
+
+    public function __construct(CsvStorage $csvStorage)
+    {
+        $this->csvStorage = $csvStorage;
+    }
 
     function add(MobileModel $mobileModel): void
     {
@@ -20,17 +24,7 @@ class CsvMobileModelRepository implements MobileModelRepositoryInterface
      */
     function findAllByBrandId(int $brand_id): array
     {
-        $handle = fopen($this->getFilename(), 'r');
-
-        if ($handle === false) throw new RuntimeException('File not found or do not open');
-
-        $headers = fgetcsv($handle, 0, self::SEPARATOR);
-
-        $mobileModels = [];
-
-        while ($row = fgetcsv($handle, 0, self::SEPARATOR)) {
-            $mobileModels[] = $this->hydrate(array_combine($headers, $row));
-        }
+        $mobileModels = $this->csvStorage->findAll([$this, 'hydrate']);
 
         $filtered_result = array_filter($mobileModels, function (MobileModel $mobileModel) use ($brand_id) {
             return $mobileModel->getBrandId() === $brand_id;
@@ -39,12 +33,7 @@ class CsvMobileModelRepository implements MobileModelRepositoryInterface
         return array_values($filtered_result);
     }
 
-    private function getFilename(): string
-    {
-        return __DIR__ . "/../../storage/" . self::FILENAME;
-    }
-
-    private function hydrate(array $item): ?MobileModel
+    function hydrate(array $item): ?MobileModel
     {
         return new MobileModel(
             $item['id'],
