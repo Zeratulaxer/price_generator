@@ -9,5 +9,5 @@ interface PercentageRateRepositoryInterface
 {
     function add(MobileBrand $mobileBrand): void;
 
-    function findOneByMonthCount(int $monthCount): PercentageRate;
+    function findOneByMonthCount(int $monthCount): ?PercentageRate;
 }

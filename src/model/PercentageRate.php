@@ -4,6 +4,11 @@ namespace App\model;
 
 class PercentageRate
 {
+    /**
+     * This field is identifier(PK).
+     *
+     * @var int
+     */
     private int $month_count;
 
     private float $percentage;

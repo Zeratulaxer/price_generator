@@ -3,15 +3,20 @@
 namespace App\repository;
 
 use App\model\MobileModel;
+use App\model\Money;
+use App\service\creditPriceCalculator\CreditPriceCalculator;
 use App\service\csvStorage\CsvStorage;
 
 class CsvMobileModelRepository implements MobileModelRepositoryInterface
 {
     private CsvStorage $csvStorage;
 
-    public function __construct(CsvStorage $csvStorage)
+    private CreditPriceCalculator $creditPriceCalculator;
+
+    public function __construct(CsvStorage $csvStorage, CreditPriceCalculator $creditPriceCalculator)
     {
         $this->csvStorage = $csvStorage;
+        $this->creditPriceCalculator = $creditPriceCalculator;
     }
 
     function add(MobileModel $mobileModel): void
@@ -35,10 +40,16 @@ class CsvMobileModelRepository implements MobileModelRepositoryInterface
 
     function hydrate(array $item): ?MobileModel
     {
+        $basePrice = new Money((float)$item['price_amount'], $item['price_currency']);
+
         return new MobileModel(
             $item['id'],
             $item['name'],
             $item['brand_id'],
+            $basePrice,
+            $this->creditPriceCalculator->calculate($basePrice, 12),
+            $this->creditPriceCalculator->calculate($basePrice, 24),
+            $this->creditPriceCalculator->calculate($basePrice, 36),
         );
     }
 }

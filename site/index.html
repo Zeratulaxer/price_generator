@@ -41,6 +41,8 @@
                 .then((json) => {
                     const models = JSON.parse(json);
 
+                    console.log(models)
+
                     const modelList = document.getElementById("model_list");
 
                     modelList.options.length = 0;
