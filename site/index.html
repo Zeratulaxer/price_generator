@@ -20,6 +20,10 @@
 
             modelsById: {},
             selectedModelId: null,
+
+            selectedModelDetails: {},
+
+            selectedOrganization: "",
         }
 
         function initializeBrands() {
@@ -39,6 +43,7 @@
                     });
 
                     state.selectedBrandId = parseInt(brandList.options[brandList.selectedIndex].value)
+                    state.selectedOrganization = document.getElementsByName("radio_organization")[0].value
 
                     onSelectBrand(brandList);
                 })
@@ -79,16 +84,23 @@
                 .then((json) => {
                     state.selectedModelId = parseInt(modelList.options[modelList.selectedIndex].value)
 
-                    const details = JSON.parse(json);
+                    state.selectedModelDetails = JSON.parse(json);
 
-                    updateCanvas(details)
+                    updateCanvas()
                 })
                 .catch((error) => {
                     console.error('Request failed', error)
                 });
         }
 
-        function updateCanvas(details) {
+        function onChangeRadio(radio) {
+            state.selectedOrganization = radio.value
+
+            updateCanvas()
+        }
+
+        function updateCanvas() {
+            const details = state.selectedModelDetails
             const brand = state.brandsById[state.selectedBrandId]
             const model = state.modelsById[state.selectedModelId]
             const canvas = document.getElementById("priceFormCanvas");
@@ -138,6 +150,11 @@
             ctx.font = "10px Verdana";
             ctx.fillText(details.rearCamera, 260, 540);
             ctx.fillText(details.frontCamera, 260, 555);
+
+            ctx.font = "10px Verdana";
+            ctx.fillText(state.selectedOrganization, 215, 630);
+
+            ctx.fillText(new Date().toLocaleString().replace(',',''), 20, 630);
         }
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -157,6 +174,26 @@
 <select class="noPrint" id="model_list" name="model_list" disabled="disabled" onchange="onSelectModel(this)">
     <option value="1">Please select brand...</option>
 </select>
+
+<br>
+<br>
+
+<label>
+    <input
+            type="radio"
+            name="radio_organization"
+            checked onchange="onChangeRadio(this)"
+            value="ИП Тимошевский С.В."
+    >ИП Тимошевский С.В.
+</label>
+<label>
+    <input
+            type="radio"
+            name="radio_organization"
+            onchange="onChangeRadio(this)"
+            value='ООО "ВсетиШоп"'
+    >ООО "ВсетиШоп"
+</label>
 
 <br>
 <br>
