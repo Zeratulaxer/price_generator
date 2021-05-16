@@ -1,5 +1,5 @@
-id;name;processor;cpu;memory;storage;battery;display;rear_camera;front_camera;model_id
-1;Iphone 11 Pro Max;A11 Bionic;2.99GHz;8GB RAM;256GB;1000mAh;12.0;12Mp;12;3
-2;Iphone 8;A11 Bionic;2.99GHz;6GB RAM;512GB;2000mAh;12.0;14Mp;12;1
-3;Iphone X;A12 Bionic;2.99GHz;4GB RAM;128GB;3000mAh;12.0;16Mp;12;2
-4;Iphone 12 Pro Max;A14 Bionic;2.99GHz;2GB RAM;128GB;4000mAh;12.0;20Mp;12;4
+id;name;cpu_core;cpu_ghz;memory;storage;battery;display_type;display_pix;rear_camera;front_camera;model_id
+1;Iphone 11 Pro;4 ядра;2990МГц;8Гб ОЗУ;256Гб;1000мАч;TFT 6.5;1920x1080;48+2+6+8Мп;12Mp;3
+2;Iphone 8;4 ядра;2990МГц;6Гб ОЗУ;256Гб;1000мАч;TFT 7.0;1920x1080;48+2+6+8Мп;36Мп;1
+3;Iphone X;6 ядер;2990МГц;4Гб ОЗУ;256Гб;1000мАч;TFT 7.5;1920x1080;48+2+6+8Мп;8Мп;2
+4;Iphone 12 Pro Max;8 ядер;2990МГц;2Гб ОЗУ;256Гб;1000мАч;TFT 8.0;1920x1080;48+2+6+8Мп;7Мп;4

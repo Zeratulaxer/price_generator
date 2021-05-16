@@ -14,6 +14,14 @@ class Money implements \JsonSerializable
         $this->currency = $currency;
     }
 
+    public function jsonSerialize(): array
+    {
+        return [
+            'amount' => $this->getAmount(),
+            'currency' => $this->getCurrency(),
+        ];
+    }
+
     public function getAmount(): float
     {
         return $this->amount;
@@ -22,13 +30,5 @@ class Money implements \JsonSerializable
     public function getCurrency(): string
     {
         return $this->currency;
-    }
-
-    public function jsonSerialize(): array
-    {
-        return [
-            'amount' => $this->getAmount(),
-            'currency' => $this->getCurrency(),
-        ];
     }
 }

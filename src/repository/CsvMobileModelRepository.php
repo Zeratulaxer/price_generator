@@ -27,15 +27,15 @@ class CsvMobileModelRepository implements MobileModelRepositoryInterface
     /**
      * @inheritDoc
      */
-    function findAllByBrandId(int $brand_id): array
+    function findAllByBrandId(int $brandId): array
     {
         $mobileModels = $this->csvStorage->findAll([$this, 'hydrate']);
 
-        $filtered_result = array_filter($mobileModels, function (MobileModel $mobileModel) use ($brand_id) {
-            return $mobileModel->getBrandId() === $brand_id;
+        $filteredResult = array_filter($mobileModels, function (MobileModel $mobileModel) use ($brandId) {
+            return $mobileModel->getBrandId() === $brandId;
         });
 
-        return array_values($filtered_result);
+        return array_values($filteredResult);
     }
 
     function hydrate(array $item): ?MobileModel

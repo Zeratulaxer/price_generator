@@ -9,8 +9,8 @@ interface ModelDetailsRepositoryInterface
     function add(ModelDetails $modelDetails): void;
 
     /**
-     * @param int $model_id
+     * @param int $modelId
      * @return ?ModelDetails
      */
-    function findOneByModelId(int $model_id): ?ModelDetails;
+    function findOneByModelId(int $modelId): ?ModelDetails;
 }

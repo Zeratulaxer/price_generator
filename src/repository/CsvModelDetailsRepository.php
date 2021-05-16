@@ -19,17 +19,17 @@ class CsvModelDetailsRepository implements ModelDetailsRepositoryInterface
         // TODO: Implement add() method.
     }
 
-    function findOneByModelId(int $model_id): ?ModelDetails
+    function findOneByModelId(int $modelId): ?ModelDetails
     {
         $modelDetailsList = $this->csvStorage->findAll([$this, 'hydrate']);
 
-        $filtered_result = array_filter($modelDetailsList, function (ModelDetails $modelDetails) use ($model_id) {
-            return $modelDetails->getModelId() === $model_id;
+        $filteredResult = array_filter($modelDetailsList, function (ModelDetails $modelDetails) use ($modelId) {
+            return $modelDetails->getModelId() === $modelId;
         });
 
-        if (count($filtered_result) <= 0) return null;
+        if (count($filteredResult) <= 0) return null;
 
-        return reset($filtered_result);
+        return reset($filteredResult);
     }
 
     function hydrate(array $item): ModelDetails
@@ -37,12 +37,13 @@ class CsvModelDetailsRepository implements ModelDetailsRepositoryInterface
         return new ModelDetails(
             $item['id'],
             $item['name'],
-            $item['processor'],
-            $item['cpu'],
+            $item['cpu_core'],
+            $item['cpu_ghz'],
             $item['memory'],
             $item['storage'],
             $item['battery'],
-            $item['display'],
+            $item['display_type'],
+            $item['display_pix'],
             $item['rear_camera'],
             $item['front_camera'],
             $item['model_id'],

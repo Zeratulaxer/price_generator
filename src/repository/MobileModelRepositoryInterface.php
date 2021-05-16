@@ -9,8 +9,8 @@ interface MobileModelRepositoryInterface
     function add(MobileModel $mobileModel): void;
 
     /**
-     * @param int $brand_id
+     * @param int $brandId
      * @return MobileModel[]
      */
-    function findAllByBrandId(int $brand_id): array;
+    function findAllByBrandId(int $brandId): array;
 }

@@ -6,7 +6,7 @@ class MobileModel implements \JsonSerializable
 {
     private int $id;
     private string $name;
-    private int $brand_id;
+    private int $brandId;
     private Money $price;
     private CreditPrice $creditPrice12;
     private CreditPrice $creditPrice24;
@@ -15,7 +15,7 @@ class MobileModel implements \JsonSerializable
     public function __construct(
         int $id,
         string $name,
-        int $brand_id,
+        int $brandId,
         Money $price,
         CreditPrice $creditPrice12,
         CreditPrice $creditPrice24,
@@ -24,7 +24,7 @@ class MobileModel implements \JsonSerializable
     {
         $this->id = $id;
         $this->name = $name;
-        $this->brand_id = $brand_id;
+        $this->brandId = $brandId;
         $this->price = $price;
         $this->creditPrice12 = $creditPrice12;
         $this->creditPrice24 = $creditPrice24;
@@ -36,7 +36,7 @@ class MobileModel implements \JsonSerializable
         return [
             'id' => $this->getId(),
             'name' => $this->getName(),
-            'brand_id' => $this->getBrandId(),
+            'brandId' => $this->getBrandId(),
             'price' => $this->getPrice(),
             'creditPrice12' => $this->getCreditPrice12(),
             'creditPrice24' => $this->getCreditPrice24(),
@@ -56,7 +56,7 @@ class MobileModel implements \JsonSerializable
 
     public function getBrandId(): int
     {
-        return $this->brand_id;
+        return $this->brandId;
     }
 
     public function getPrice(): Money

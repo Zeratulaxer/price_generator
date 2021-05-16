@@ -20,6 +20,15 @@ class CreditPrice implements \JsonSerializable
         $this->pricePerMonth = $pricePerMonth;
     }
 
+    public function jsonSerialize(): array
+    {
+        return [
+            'monthCount' => $this->getMonthCount(),
+            'price' => $this->getPrice(),
+            'pricePerMonth' => $this->getPricePerMonth(),
+        ];
+    }
+
     public function getMonthCount(): int
     {
         return $this->monthCount;
@@ -33,14 +42,5 @@ class CreditPrice implements \JsonSerializable
     public function getPricePerMonth(): Money
     {
         return $this->pricePerMonth;
-    }
-
-    public function jsonSerialize(): array
-    {
-        return [
-            'monthCount' => $this->getMonthCount(),
-            'price' => $this->getPrice(),
-            'pricePerMonth' => $this->getPricePerMonth(),
-        ];
     }
 }
