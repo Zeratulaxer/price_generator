@@ -14,6 +14,14 @@
         }
     </style>
     <script type="text/javascript">
+        const state = {
+            brandsById: {},
+            selectedBrandId: null,
+
+            modelsById: {},
+            selectedModelId: null,
+        }
+
         function initializeBrands() {
             fetch('http://localhost:8080/getBrands')
                 .then(res => res.text())
@@ -26,7 +34,11 @@
 
                     brands.forEach((brand) => {
                         brandList.append(new Option(brand.name, brand.id))
+
+                        state.brandsById[brand.id] = brand
                     });
+
+                    state.selectedBrandId = parseInt(brandList.options[brandList.selectedIndex].value)
 
                     onSelectBrand(brandList);
                 })
@@ -39,9 +51,9 @@
             fetch('http://localhost:8080/getModels/' + brandList.value)
                 .then(res => res.text())
                 .then((json) => {
-                    const models = JSON.parse(json);
+                    state.selectedBrandId = parseInt(brandList.options[brandList.selectedIndex].value)
 
-                    console.log(models)
+                    const models = JSON.parse(json);
 
                     const modelList = document.getElementById("model_list");
 
@@ -50,6 +62,8 @@
 
                     models.forEach((model) => {
                         modelList.append(new Option(model.name, model.id))
+
+                        state.modelsById[model.id] = model
                     });
 
                     onSelectModel(modelList);
@@ -63,21 +77,20 @@
             fetch('http://localhost:8080/getModelDetails/' + modelList.value)
                 .then(res => res.text())
                 .then((json) => {
+                    state.selectedModelId = parseInt(modelList.options[modelList.selectedIndex].value)
+
                     const details = JSON.parse(json);
 
-                    const brandList = document.getElementById("brand_list");
-
-                    const modelName = modelList.options[modelList.selectedIndex].text
-                    const brandName = brandList.options[brandList.selectedIndex].text
-
-                    updateCanvas(brandName, modelName, details)
+                    updateCanvas(details)
                 })
                 .catch((error) => {
                     console.error('Request failed', error)
                 });
         }
 
-        function updateCanvas(brandName, modelName, details) {
+        function updateCanvas(details) {
+            const brand = state.brandsById[state.selectedBrandId]
+            const model = state.modelsById[state.selectedModelId]
             const canvas = document.getElementById("priceFormCanvas");
             const priceFormImg = document.getElementById("priceForm");
             const ctx = canvas.getContext("2d");
@@ -91,23 +104,40 @@
             ctx.drawImage(priceFormImg, 0, 0);
 
             const centerPointX = (priceFormImg.width - 10) / 2
-            const halfLength = (brandName + " " + modelName).length / 2
+            const halfLength = (brand.name + " " + model.name).length / 2
 
             ctx.fillStyle = "black";
             ctx.font = "20px Verdana";
-            ctx.fillText(brandName + " " + modelName, centerPointX - halfLength * 8, 140);
+            ctx.fillText(brand.name + " " + model.name, centerPointX - halfLength * 8, 140);
+
+            //todo fix rounding 26.72823 -> 26.72
+            ctx.font = "34px Verdana";
+            ctx.fillText(model.creditPrice36.pricePerMonth.amount.toFixed(2), 120, 270)
+            ctx.fillText(model.creditPrice24.pricePerMonth.amount.toFixed(2), 120, 365)
+            ctx.fillText(model.creditPrice12.pricePerMonth.amount.toFixed(2), 120, 455)
+
+            ctx.font = "25px Verdana";
+            ctx.fillText(model.price.amount, 220, 500)
 
             if (details === null) return
 
-            ctx.fillText(details.display, 60, 550);
-            ctx.fillText(details.storage, 57, 605);
+            ctx.font = "12px Verdana";
+            ctx.fillText(details.displayType, 60, 540);
+            ctx.fillText(details.displayPix, 60, 555);
+
+            ctx.fillText(details.memory, 60, 590);
+            ctx.fillText(details.storage, 60, 605);
+
+            ctx.font = "11px Verdana";
+            ctx.fillText(details.cpuCore, 167, 540);
+            ctx.fillText(details.cpuGhz, 167, 555);
 
             ctx.font = "12px Verdana";
-            ctx.fillText(details.cpu, 167, 550);
-            ctx.fillText(details.battery, 165, 605);
+            ctx.fillText(details.battery, 167, 600);
 
-            ctx.font = "20px Verdana";
-            ctx.fillText(details.rear_camera, 265, 550);
+            ctx.font = "10px Verdana";
+            ctx.fillText(details.rearCamera, 260, 540);
+            ctx.fillText(details.frontCamera, 260, 555);
         }
 
         document.addEventListener("DOMContentLoaded", () => {

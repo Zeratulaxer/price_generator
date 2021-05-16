@@ -15,7 +15,7 @@ class ModelDetails implements \JsonSerializable
     private string $displayPix;
     private string $rearCamera;
     private string $frontCamera;
-    private string $modelId;
+    private int $modelId;
 
     public function __construct(
         int $id,
@@ -29,7 +29,7 @@ class ModelDetails implements \JsonSerializable
         string $displayPix,
         string $rearCamera,
         string $frontCamera,
-        string $modelId
+        int $modelId
     )
     {
         $this->id = $id;
@@ -119,7 +119,7 @@ class ModelDetails implements \JsonSerializable
         return $this->frontCamera;
     }
 
-    public function getModelId(): string
+    public function getModelId(): int
     {
         return $this->modelId;
     }
